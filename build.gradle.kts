@@ -8,11 +8,11 @@ base {
     archivesName.set("ryzen")
 }
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
+    minecraft("com.mojang:minecraft:1.21.1")
     // Используем intermediary чтобы сохранить class_xxx / method_xxx имена из декомпила (VineFlower выдал intermediary)
-    mappings("net.fabricmc:intermediary:1.21.11:v2")
+    mappings("net.fabricmc:intermediary:1.21.1:v2")
     modImplementation("net.fabricmc:fabric-loader:0.19.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.141.6+1.21.11")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.141.6+1.21.1")
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
