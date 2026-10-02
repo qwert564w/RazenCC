@@ -1,0 +1,457 @@
+Akita_Neru/Skin.png
+Akita_Neru/SquAPI_MODIFIED.lua
+Akita_Neru/SquAssets_MODIFIED.lua
+Akita_Neru/avatar.json
+Akita_Neru/avatar.png
+Akita_Neru/body.png
+Akita_Neru/model.bbmodel
+Akita_Neru/physBoneAPI.lua
+Akita_Neru/script.lua
+Akita_Neru/skirt_physics.lua
+Akita_Neru/texture.png
+Akita_Neru/texture_e.png
+Android/android.bbmodel
+Android/android.png
+Android/avatar.json
+Android/avatar.png
+Android/scripts/SquAPI.lua
+Android/scripts/SquAPI_modules/SquAssets.lua
+Android/scripts/SquAPI_modules/ear.lua
+Android/scripts/SquAPI_modules/tail.lua
+Android/scripts/script.lua
+Aria/avatar.json
+Aria/avatar.png
+Aria/eyes.png
+Aria/lib/SquAPI.lua
+Aria/lib/SquAssets.lua
+Aria/lib/swinging_physics.lua
+Aria/license.lua
+Aria/model.bbmodel
+Aria/script.lua
+Aria/texture.png
+Cool scythe/EZAnims.lua
+Cool scythe/EZItems.lua
+Cool scythe/Make scythe work.lua
+Cool scythe/Script.lua
+Cool scythe/avatar.json
+Cool scythe/avatar.png
+Cool scythe/model_1.bbmodel
+Cotton/avatar.json
+Cotton/avatar.png
+Cotton/lib/EZAnims-DESKTOP-CABL0M3.lua
+Cotton/lib/EZAnims.lua
+Cotton/lib/GSAnimBlend.lua
+Cotton/lib/SquAPI.lua
+Cotton/lib/SquAssets.lua
+Cotton/lib/swinging_physics.lua
+Cotton/license.lua
+Cotton/maintexture.png
+Cotton/model.bbmodel
+Cotton/rabbit.png
+Cotton/script.lua
+Cotton/texture.png
+Dreamy Fox Companion/avatar.json
+Dreamy Fox Companion/avatar.png
+Dreamy Fox Companion/fox.png
+Dreamy Fox Companion/model.bbmodel
+Dreamy Fox Companion/script.lua
+Dreamy Fox Companion/snow_fox.png
+Floating_swords_v2/avatar.json
+Floating_swords_v2/avatar.png
+Floating_swords_v2/model.bbmodel
+Floating_swords_v2/script.lua
+Frieren staff/avatar.json
+Frieren staff/avatar.png
+Frieren staff/model.bbmodel
+Goat/avatar.json
+Goat/avatar.png
+Goat/model.bbmodel
+Goat/texture.png
+Goldenglow/GSAnimBlend.lua
+Goldenglow/Goldenglow.bbmodel
+Goldenglow/Goldenglow.png
+Goldenglow/JimmyAnims.lua
+Goldenglow/SquAPI.lua
+Goldenglow/StaticStaff_e.png
+Goldenglow/Static_e.png
+Goldenglow/avatar.json
+Goldenglow/avatar.png
+Goldenglow/script.lua
+Kal'tsit/GSAnimBlend.lua
+Kal'tsit/JimmyAnims.lua
+Kal'tsit/SquAPI.lua
+Kal'tsit/SquAssets.lua
+Kal'tsit/avatar.json
+Kal'tsit/avatar.png
+Kal'tsit/model.bbmodel
+Kal'tsit/script.lua
+Kal'tsit/swinging_physics.lua
+Kiana/BatterUp.lua
+Kiana/GSAnimBlend.lua
+Kiana/JimmyAnims.lua
+Kiana/Kiana.bbmodel
+Kiana/SquAPI.lua
+Kiana/Trident.bbmodel
+Kiana/avatar.json
+Kiana/avatar.png
+Kiana/outline.lua
+Kiana/script.lua
+Kiana/swinging_physics.lua
+Kiana/velocity.lua
+Mikie/avatar.json
+Mikie/avatar.png
+Mikie/eyes.png
+Mikie/lib/SquAPI.lua
+Mikie/lib/SquAssets.lua
+Mikie/lib/swinging_physics.lua
+Mikie/model.bbmodel
+Mikie/script.lua
+Mikie/texture.png
+Miku16th_release_version/Miku16th_v3.bbmodel
+Miku16th_release_version/Readme.txt
+Miku16th_release_version/SquAPI.lua
+Miku16th_release_version/SquAssets.lua
+Miku16th_release_version/avatar.json
+Miku16th_release_version/avatar.png
+Miku16th_release_version/script.lua
+Miku16th_release_version/six_skirt.lua
+Miku16th_release_version/swinging_physics.lua
+Model Test/EZAnims.lua
+Model Test/GSAnimBlend.lua
+Model Test/avatar.json
+Model Test/avatar.png
+Model Test/model.bbmodel
+Model Test/script.lua
+Mothi/avatar.json
+Mothi/avatar.png
+Mothi/lib/GSAnimBlend.lua
+Mothi/lib/JimmyAnims.lua
+Mothi/lib/SquAPI.lua
+Mothi/lib/SquAssets.lua
+Mothi/lib/swinging_physics.lua
+Mothi/models/model.bbmodel
+Mothi/scripts/lib_applies.lua
+Mothi/scripts/library.lua
+Mothi/scripts/model_settings.lua
+Mothli/avatar.json
+Mothli/avatar.png
+Mothli/dronezAPI.lua
+Mothli/example.lua
+Mothli/eyes_e.png
+Mothli/mothli.bbmodel
+Mothli/texture.png
+Peter/Peter/avatar.json
+Peter/Peter/avatar.png
+Peter/Peter/model.bbmodel
+Peter/Peter/script.lua
+Peter/Peter/skin.png
+Peter/avatar.json
+Peter/avatar.png
+Peter/model.bbmodel
+Peter/script.lua
+Peter/skin.png
+Repo/EZAnims.lua
+Repo/GSAnimBlend.lua
+Repo/SquAPI.lua
+Repo/SquAssets.lua
+Repo/avatar.json
+Repo/avatar.png
+Repo/model.bbmodel
+Repo/script.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/EZAnims.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/GSAnimBlend.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/SquAPI.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/SquAssets.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/avatar.json
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/avatar.png
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/base.png
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/bell.png
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/model.bbmodel
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/plaque.png
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/script.lua
+Turbo Granny (Dan Da Dan)/Turbo Granny (Dan Da Dan)/swinging_physics.lua
+Untitled Goose/Untitled Goose/EZAnims.lua
+Untitled Goose/Untitled Goose/GSAnimBlend.lua
+Untitled Goose/Untitled Goose/Honk.ogg
+Untitled Goose/Untitled Goose/SquAPI.lua
+Untitled Goose/Untitled Goose/SquAssets.lua
+Untitled Goose/Untitled Goose/avatar.json
+Untitled Goose/Untitled Goose/avatar.png
+Untitled Goose/Untitled Goose/goose.bbmodel
+Untitled Goose/Untitled Goose/goose.png
+Untitled Goose/Untitled Goose/script.lua
+Vampire/avatar.json
+Vampire/avatar.png
+Vampire/lib/BatterUp.lua
+Vampire/lib/GSAnimBlend.lua
+Vampire/lib/JimmyAnims.lua
+Vampire/lib/SquAPI.lua
+Vampire/lib/SquAssets.lua
+Vampire/lib/confetti.lua
+Vampire/lib/swinging_physics.lua
+Vampire/model.bbmodel
+Vampire/scripts/action_wheel.lua
+Vampire/scripts/code_assets.lua
+Vampire/scripts/script.lua
+Vampire/sword.bbmodel
+Vampire/textures/eyes.png
+Vampire/textures/eyes_e.png
+Vampire/textures/goblet.png
+Vampire/textures/sword.png
+Vampire/textures/texture.png
+Vampire/textures/texture2.png
+Vampire/textures/x32.png
+Wheelchair/- HeightAdjuster.lua
+Wheelchair/- SKIN.lua
+Wheelchair/GSAnimBlend.lua
+Wheelchair/JimmyAnims.lua
+Wheelchair/MODELNAME.bbmodel
+Wheelchair/SquAPI.lua
+Wheelchair/SquAPI_modules/SquAssets.lua
+Wheelchair/SquAPI_modules/VanillaElement.lua
+Wheelchair/SquAPI_modules/animateTexture.lua
+Wheelchair/SquAPI_modules/arm.lua
+Wheelchair/SquAPI_modules/bounceWalk.lua
+Wheelchair/SquAPI_modules/crouch.lua
+Wheelchair/SquAPI_modules/ears.lua
+Wheelchair/SquAPI_modules/eye.lua
+Wheelchair/SquAPI_modules/randimation.lua
+Wheelchair/SquAPI_modules/squishy.lua
+Wheelchair/SquAPI_modules/tail.lua
+Wheelchair/SquAPI_modules/taur.lua
+Wheelchair/avatar.json
+Wheelchair/avatar.png
+Wheelchair/ears.lua
+Wheelchair/props.lua
+Wheelchair/squishyAPI.lua
+Wheelchair/swingingPhysics.lua
+Wheelchair/swingphysics script.lua
+Wheelchair/textures/TEXTURENAME.png
+Wheelchair/textures/Wheelchair.png
+Wheelchair/textures/book.png
+Wheelchair/textures/bottle.png
+Wheelchair/textures/hat.png
+Wheelchair/textures/sword.png
+Wheelchair/textures/texture.png
+Wheelchair/the action_wheel.lua
+Wheelchair/weapons/bow.bbmodel
+Wheelchair/weapons/sword.bbmodel
+Wheelchair/weapons/trident.bbmodel
+baron11/JimmyAnims.lua
+baron11/avatar.json
+baron11/avatar.png
+baron11/item.lua
+baron11/model.bbmodel
+baron11/physBoneAPI.lua
+baron11/script.lua
+beardie/EZAnims.lua
+beardie/avatar.json
+beardie/avatar.png
+beardie/model.bbmodel
+beardie/script.lua
+can+wheelchair/SKIN.png
+can+wheelchair/avatar.json
+can+wheelchair/avatar.png
+can+wheelchair/cola.png
+can+wheelchair/litenergy.png
+can+wheelchair/model.bbmodel
+can+wheelchair/mountaindew.png
+can+wheelchair/openBanky.ogg
+can+wheelchair/script.lua
+can+wheelchair/texture.png
+can+wheelchair/texture_e.png
+head-3D Glasses/3D Glasses (Original)/3DGlasses.bbmodel
+head-3D Glasses/3D Glasses (Original)/avatar.json
+head-3D Glasses/3D Glasses (Original)/avatar.png
+head-3D Glasses/3D Glasses (Original)/script.lua
+head-3D Glasses/3D Glasses (Overhaul)/3DGlasses.bbmodel
+head-3D Glasses/3D Glasses (Overhaul)/avatar.json
+head-3D Glasses/3D Glasses (Overhaul)/avatar.png
+head-3D Glasses/3D Glasses (Overhaul)/script.lua
+head-3D Glasses/3D Glasses (Overhaul)/soggyscript.lua
+head-Astronaut Helmet/Astronaut Helmet (Red)/AstronautHelmet.bbmodel
+head-Astronaut Helmet/Astronaut Helmet (Red)/Idle.json
+head-Astronaut Helmet/Astronaut Helmet (Red)/avatar.json
+head-Astronaut Helmet/Astronaut Helmet (Red)/avatar.png
+head-Astronaut Helmet/Astronaut Helmet (Red)/script.lua
+head-Astronaut Helmet/Astronaut Helmet (Red)/soggyscript.lua
+head-Astronaut Helmet/Astronaut Helmet/AstronautHelmet.bbmodel
+head-Astronaut Helmet/Astronaut Helmet/Idle.json
+head-Astronaut Helmet/Astronaut Helmet/avatar.json
+head-Astronaut Helmet/Astronaut Helmet/avatar.png
+head-Astronaut Helmet/Astronaut Helmet/script.lua
+head-Astronaut Helmet/Astronaut Helmet/soggyscript.lua
+head-Cat Ears+Tail/avatar.json
+head-Cat Ears+Tail/avatar.png
+head-Cat Ears+Tail/cat+ears+tail.bbmodel
+head-Cat Ears+Tail/feline_tail+ears_base.png
+head-Cat Ears+Tail/texture.png
+head-Chef Hat/Chef Hat/ChefHat.bbmodel
+head-Chef Hat/Chef Hat/avatar.json
+head-Chef Hat/Chef Hat/avatar.png
+head-Chef Hat/Chef Hat/script.lua
+head-Chef Hat/Chef Hat/soggyscript.lua
+head-Crown/Crown (Cracked)/CrackedCrown.bbmodel
+head-Crown/Crown (Cracked)/Idle.json
+head-Crown/Crown (Cracked)/avatar.json
+head-Crown/Crown (Cracked)/avatar.png
+head-Crown/Crown (Cracked)/script.lua
+head-Crown/Crown (Cracked)/soggyscript.lua
+head-Crown/Crown/Crown.bbmodel
+head-Crown/Crown/Idle.json
+head-Crown/Crown/avatar.json
+head-Crown/Crown/avatar.png
+head-Crown/Crown/script.lua
+head-Crown/Crown/soggyscript.lua
+head-Flower Hat/Flower Hat.bbmodel
+head-Flower Hat/avatar.json
+head-Flower Hat/avatar.png
+head-Flower Hat/script.lua
+head-Newsboy Cap/Newsboy Cap/NewsboyCap.bbmodel
+head-Newsboy Cap/Newsboy Cap/avatar.json
+head-Newsboy Cap/Newsboy Cap/avatar.png
+head-Newsboy Cap/Newsboy Cap/script.lua
+head-Newsboy Cap/Newsboy Cap/soggyscript.lua
+head-Plaid Hat/Plaid Hat/PlaidHat.bbmodel
+head-Plaid Hat/Plaid Hat/avatar.json
+head-Plaid Hat/Plaid Hat/avatar.png
+head-Plaid Hat/Plaid Hat/script.lua
+head-Plaid Hat/Plaid Hat/soggyscript.lua
+head-Straw Hat/Straw Hat/StrawHat.bbmodel
+head-Straw Hat/Straw Hat/avatar.json
+head-Straw Hat/Straw Hat/avatar.png
+head-Straw Hat/Straw Hat/script.lua
+head-Straw Hat/Straw Hat/soggyscript.lua
+head-Top Hat/Top Hat (Original)/TopHat.bbmodel
+head-Top Hat/Top Hat (Original)/avatar.json
+head-Top Hat/Top Hat (Original)/avatar.png
+head-Top Hat/Top Hat (Original)/script.lua
+head-Top Hat/Top Hat (Overhaul)/TopHat.bbmodel
+head-Top Hat/Top Hat (Overhaul)/avatar.json
+head-Top Hat/Top Hat (Overhaul)/avatar.png
+head-Top Hat/Top Hat (Overhaul)/script.lua
+head-Top Hat/Top Hat (Overhaul)/soggyscript.lua
+head-Traffic Cone/Traffic Cone (Original)/TrafficCone.bbmodel
+head-Traffic Cone/Traffic Cone (Original)/avatar.json
+head-Traffic Cone/Traffic Cone (Original)/avatar.png
+head-Traffic Cone/Traffic Cone (Original)/script.lua
+head-Traffic Cone/Traffic Cone (Overhaul)/TrafficCone.bbmodel
+head-Traffic Cone/Traffic Cone (Overhaul)/avatar.json
+head-Traffic Cone/Traffic Cone (Overhaul)/avatar.png
+head-Traffic Cone/Traffic Cone (Overhaul)/script.lua
+head-Traffic Cone/Traffic Cone (Overhaul)/soggyscript.lua
+head-Ushanka/Ushanka (Initial Overhaul)/Ushanka.bbmodel
+head-Ushanka/Ushanka (Initial Overhaul)/avatar.json
+head-Ushanka/Ushanka (Initial Overhaul)/avatar.png
+head-Ushanka/Ushanka (Initial Overhaul)/script.lua
+head-Ushanka/Ushanka (Initial Overhaul)/soggyscript.lua
+head-Ushanka/Ushanka (Original)/Ushanka.bbmodel
+head-Ushanka/Ushanka (Original)/avatar.json
+head-Ushanka/Ushanka (Original)/avatar.png
+head-Ushanka/Ushanka (Original)/script.lua
+head-Ushanka/Ushanka (Overhaul)/Ushanka.bbmodel
+head-Ushanka/Ushanka (Overhaul)/avatar.json
+head-Ushanka/Ushanka (Overhaul)/avatar.png
+head-Ushanka/Ushanka (Overhaul)/script.lua
+head-Ushanka/Ushanka (Overhaul)/soggyscript.lua
+head-catears/Cat Ears.bbmodel
+head-catears/Cat Ears.png
+head-catears/avatar.json
+head-catears/avatar.png
+head-halo/CHANGELOG.md
+head-halo/Wings.png
+head-halo/avatar.json
+head-halo/avatar.png
+head-halo/halo.png
+head-halo/halo_e.png
+head-halo/model.bbmodel
+head-halo/script.lua
+head-isha's hat/Hat.bbmodel
+head-isha's hat/avatar.json
+head-isha's hat/avatar.png
+head-isha's hat/script.lua
+head-orange cat on neck/avatar.json
+head-orange cat on neck/avatar.png
+head-orange cat on neck/model.bbmodel
+head-orange cat on neck/script.lua
+head-orange cat on neck/sounds/meow-2.mp3
+simplewings/EZAnims.lua
+simplewings/GSAnimBlend.lua
+simplewings/avatar.json
+simplewings/avatar.png
+simplewings/model.bbmodel
+simplewings/script.lua
+simplewings/texture.png
+weapon-Apple Punch - молоток/apple_hammar.bbmodel
+weapon-Apple Punch - молоток/avatar.json
+weapon-Apple Punch - молоток/avatar.png
+weapon-Apple Punch - молоток/script.lua
+weapon-Blade of the Light - огромный меч/avatar.json
+weapon-Blade of the Light - огромный меч/avatar.png
+weapon-Blade of the Light - огромный меч/script.lua
+weapon-Blade of the Light - огромный меч/thegreatersword.bbmodel
+weapon-Komachi - оружие/GSAnimBlend.lua
+weapon-Komachi - оружие/JimmyAnims.lua
+weapon-Komachi - оружие/avatar.json
+weapon-Komachi - оружие/avatar.png
+weapon-Komachi - оружие/elytra.png
+weapon-Komachi - оружие/fumo.ogg
+weapon-Komachi - оружие/komachi.bbmodel
+weapon-Komachi - оружие/komachi.png
+weapon-Komachi - оружие/script.lua
+weapon-Momiji - оружие/GSAnimBlend.lua
+weapon-Momiji - оружие/JimmyAnims.lua
+weapon-Momiji - оружие/avatar.json
+weapon-Momiji - оружие/avatar.png
+weapon-Momiji - оружие/elytra.png
+weapon-Momiji - оружие/fumo.ogg
+weapon-Momiji - оружие/momiji.bbmodel
+weapon-Momiji - оружие/momiji.png
+weapon-Momiji - оружие/script.lua
+weapon-Murasa - оружие/GSAnimBlend.lua
+weapon-Murasa - оружие/JimmyAnims.lua
+weapon-Murasa - оружие/avatar.json
+weapon-Murasa - оружие/avatar.png
+weapon-Murasa - оружие/elytra.png
+weapon-Murasa - оружие/fumo.ogg
+weapon-Murasa - оружие/murasa.bbmodel
+weapon-Murasa - оружие/murasa.png
+weapon-Murasa - оружие/script.lua
+weapon-Noble's War Axe - оружие/avatar.json
+weapon-Noble's War Axe - оружие/avatar.png
+weapon-Noble's War Axe - оружие/script.lua
+weapon-Noble's War Axe - оружие/thecooleraxe.bbmodel
+weapon-Saber Sword 2 - убрать акссесуар и имба оружие/avatar.json
+weapon-Saber Sword 2 - убрать акссесуар и имба оружие/avatar.png
+weapon-Saber Sword 2 - убрать акссесуар и имба оружие/libs/swinging_physics.lua
+weapon-Saber Sword 2 - убрать акссесуар и имба оружие/model.bbmodel
+weapon-Saber Sword 2 - убрать акссесуар и имба оружие/script.lua
+weapon-The Dragon's Halberd - оружие/avatar.json
+weapon-The Dragon's Halberd - оружие/avatar.png
+weapon-The Dragon's Halberd - оружие/halberdstuff.bbmodel
+weapon-The Dragon's Halberd - оружие/script.lua
+weapon-Yorihime - оружие/GSAnimBlend.lua
+weapon-Yorihime - оружие/JimmyAnims.lua
+weapon-Yorihime - оружие/avatar.json
+weapon-Yorihime - оружие/avatar.png
+weapon-Yorihime - оружие/elytra.png
+weapon-Yorihime - оружие/fumo.ogg
+weapon-Yorihime - оружие/script.lua
+weapon-Yorihime - оружие/yori.bbmodel
+weapon-Yorihime - оружие/yori.png
+weapon-capitano - оружие/avatar.json
+weapon-capitano - оружие/avatar.png
+weapon-capitano - оружие/libs/swinging_physics.lua
+weapon-capitano - оружие/model.bbmodel
+weapon-capitano - оружие/script.lua
+weapon-акулка - оружие/avatar.json
+weapon-акулка - оружие/avatar.png
+weapon-акулка - оружие/blahaj.png
+weapon-акулка - оружие/items.bbmodel
+weapon-акулка - оружие/script.lua
+weapon-клоунская коса какая то - оружие/avatar.json
+weapon-клоунская коса какая то - оружие/avatar.png
+weapon-клоунская коса какая то - оружие/devilsknife.png
+weapon-клоунская коса какая то - оружие/model.bbmodel
+weapon-клоунская коса какая то - оружие/outlines.png
+weapon-клоунская коса какая то - оружие/script.lua

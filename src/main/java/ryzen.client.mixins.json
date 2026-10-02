@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "dev.ryzen.client.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"MinecraftAccessor",
+		"TitleScreenMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

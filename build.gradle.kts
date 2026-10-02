@@ -1,0 +1,44 @@
+﻿plugins {
+    id("fabric-loom") version "1.13.1"
+    id("maven-publish")
+}
+group = "org.ryzen"
+version = "1.0.0"
+base {
+    archivesName.set("ryzen")
+}
+dependencies {
+    minecraft("com.mojang:minecraft:1.21.11")
+    // Используем intermediary чтобы сохранить class_xxx / method_xxx имена из декомпила (VineFlower выдал intermediary)
+    mappings("net.fabricmc:intermediary:1.21.11:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.19.3")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.141.6+1.21.11")
+
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
+    modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
+    // JiJ libs из оригинального jar (jsoup, jsvg, jwt, netty proxy, baritone и т.д.)
+    implementation(fileTree("src/main/resources/META-INF/jars") { include("*.jar") })
+    // Дополнительные зависимости которых нет в JiJ (jsvg, baritone)
+    implementation("com.github.weisj:jsvg:2.1.0")
+    implementation("org.jsoup:jsoup:1.18.3")
+    implementation("io.netty:netty-codec-socks:4.2.15.Final")
+    implementation("io.netty:netty-handler-proxy:4.2.15.Final")
+}
+loom {
+    mods {
+        create("ryzen") {
+            sourceSet(sourceSets.main.get())
+        }
+    }
+}
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+    options.release.set(21)
+}

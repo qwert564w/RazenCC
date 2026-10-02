@@ -1,0 +1,11 @@
+Figura is distributed under the PolyForm Noncommercial License 1.0.0.
+
+The bundled artifact ships no license file of its own; the identifier is
+declared in its fabric.mod.json as "Polyform-Noncommercial-1.0.0".
+
+Full text:   https://polyformproject.org/licenses/noncommercial/1.0.0/
+Project:     https://github.com/FiguraMC/Figura
+Modrinth:    https://modrinth.com/mod/figura
+
+Figura is a separate third-party component. It is bundled unmodified and is
+not relicensed as Ryzen code.

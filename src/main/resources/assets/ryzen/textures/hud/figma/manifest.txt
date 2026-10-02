@@ -1,0 +1,39 @@
+# Ryzen Interface.fig — HUD vector export manifest
+# Source frame: 0:786 hud (1920x1080)
+# Format: node_id -> filename -> parent_path
+
+0:791 -> keybinds_close_0_791.svg -> 0:788 Group 73
+0:793 -> keybinds_title_0_793.svg -> 0:788 Group 73
+0:799 -> keybinds_kill_aura_keyboard_0_799.svg -> 0:788 Group 73 > 0:794 Group 69 > 0:798 Group 44
+0:801 -> keybinds_kill_aura_status_0_801.svg -> 0:788 Group 73 > 0:794 Group 69 > 0:800 Group 3
+0:808 -> keybinds_aim_bow_keyboard_0_808.svg -> 0:788 Group 73 > 0:803 Group 70 > 0:807 Group 44
+0:810 -> keybinds_aim_bow_status_0_810.svg -> 0:788 Group 73 > 0:803 Group 70 > 0:809 Group 3
+0:817 -> keybinds_auto_armor_keyboard_0_817.svg -> 0:788 Group 73 > 0:812 Group 71 > 0:816 Group 44
+0:819 -> keybinds_auto_armor_status_0_819.svg -> 0:788 Group 73 > 0:812 Group 71 > 0:818 Group 3
+0:825 -> keybinds_criticals_keyboard_0_825.svg -> 0:788 Group 73 > 0:821 Group 72 > 0:824 Group 44
+0:827 -> keybinds_criticals_status_0_827.svg -> 0:788 Group 73 > 0:821 Group 72 > 0:826 Group 3
+0:835 -> anarchy_close_0_835.svg -> 0:829 Group 81
+0:837 -> anarchy_title_0_837.svg -> 0:829 Group 81
+0:857 -> stafflist_close_0_857.svg -> 0:854 Group 76
+0:859 -> stafflist_title_0_859.svg -> 0:854 Group 76
+0:865 -> stafflist_spec_0_865.svg -> 0:854 Group 76 > 0:860 Group 69
+0:872 -> stafflist_playing_0_872.svg -> 0:854 Group 76 > 0:867 Group 73
+0:879 -> stafflist_vanish_row3_0_879.svg -> 0:854 Group 76 > 0:874 Group 74
+0:886 -> stafflist_vanish_row4_0_886.svg -> 0:854 Group 76 > 0:881 Group 75
+0:890 -> effects_close_0_890.svg -> 0:887 Group 77
+0:892 -> effects_title_0_892.svg -> 0:887 Group 77
+0:929 -> notifications_config_saved_0_929.svg -> 0:924 notifications > 0:925 5
+0:935 -> notifications_killaura_enabled_0_935.svg -> 0:924 notifications > 0:930 4 > 0:932 включен
+0:938 -> notifications_killaura_disabled_0_938.svg -> 0:924 notifications > 0:930 4 > 0:936 выключен
+0:945 -> notifications_erida_star_0_945.svg -> 0:924 notifications > 0:940 3
+0:951 -> notifications_disorientation_star_0_951.svg -> 0:924 notifications > 0:946 2
+0:957 -> notifications_totem_lost_0_957.svg -> 0:924 notifications > 0:952 1
+0:961 -> cooldowns_close_0_961.svg -> 0:958 Group 78
+0:963 -> cooldowns_title_0_963.svg -> 0:958 Group 78
+0:990 -> brand_logo_upper_0_990.svg -> 0:984 Group 80 > 0:985 logo > 0:988 Group 41 > 0:989 Group
+0:992 -> brand_logo_lower_0_992.svg -> 0:984 Group 80 > 0:985 logo > 0:988 Group 41 > 0:991 Group
+0:998 -> telemetry_telegram_0_998.svg -> 0:984 Group 80 > 0:993 1 > 0:996 Group 81
+0:1002 -> telemetry_fps_0_1002.svg -> 0:984 Group 80 > 0:993 1
+0:1005 -> telemetry_ping_0_1005.svg -> 0:984 Group 80 > 0:993 1
+0:1008 -> telemetry_server_0_1008.svg -> 0:984 Group 80 > 0:1006 2
+0:1040 -> target_hidden_status_0_1040.svg -> 0:1030 target > 0:1033 Group 75 (hidden in source)
