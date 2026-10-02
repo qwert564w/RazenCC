@@ -12,7 +12,7 @@ dependencies {
     // Используем intermediary чтобы сохранить class_xxx / method_xxx имена из декомпила (VineFlower выдал intermediary)
     mappings("net.fabricmc:intermediary:1.21.1:v2")
     modImplementation("net.fabricmc:fabric-loader:0.19.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.141.6+1.21.1")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.116.6+1.21.1")
 
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
