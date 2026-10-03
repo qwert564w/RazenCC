@@ -1,43 +1,49 @@
-﻿plugins {
-    id("fabric-loom") version "1.13.1"
+plugins {
+    id("fabric-loom") version "1.7.+"
     id("maven-publish")
 }
+
 group = "org.ryzen"
 version = "1.0.0"
+
 base {
     archivesName.set("ryzen")
 }
+
+repositories {
+    mavenCentral()
+    maven("https://maven.fabricmc.net/")
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:1.21.1")
-    // Используем intermediary чтобы сохранить class_xxx / method_xxx имена из декомпила (VineFlower выдал intermediary)
-    mappings("net.fabricmc:intermediary:1.21.1:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.19.3")
+    mappings("net.fabricmc:yarn:1.21.1+build.3:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.16.9")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.116.6+1.21.1")
 
-    compileOnly("org.projectlombok:lombok:1.18.32")
-    annotationProcessor("org.projectlombok:lombok:1.18.32")
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    
+    include("io.github.llamalad7:mixinextras-fabric:0.5.4")
     modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
-    // JiJ libs из оригинального jar (jsoup, jsvg, jwt, netty proxy, baritone и т.д.)
+
+    // JiJ libs из оригинального jar
     implementation(fileTree("src/main/resources/META-INF/jars") { include("*.jar") })
-    // Дополнительные зависимости которых нет в JiJ (jsvg, baritone)
+    
+    // Дополнительные зависимости
     implementation("com.github.weisj:jsvg:2.1.0")
-    implementation("org.jsoup:jsoup:1.18.3")
-    implementation("io.netty:netty-codec-socks:4.2.15.Final")
-    implementation("io.netty:netty-handler-proxy:4.2.15.Final")
+    implementation("org.jsoup:jsoup:1.18.1")
+    implementation("io.netty:netty-codec-socks:4.1.112.Final")
+    implementation("io.netty:netty-handler-proxy:4.1.112.Final")
 }
-loom {
-    mods {
-        create("ryzen") {
-            sourceSet(sourceSets.main.get())
-        }
-    }
-}
+
 java {
     withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
+
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.release.set(21)
