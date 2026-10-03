@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.7.+"
+    id("fabric-loom") version "1.7.4"
     id("maven-publish")
 }
 
@@ -27,10 +27,8 @@ dependencies {
     include("io.github.llamalad7:mixinextras-fabric:0.5.4")
     modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
 
-    // JiJ libs из оригинального jar
     implementation(fileTree("src/main/resources/META-INF/jars") { include("*.jar") })
     
-    // Дополнительные зависимости
     implementation("com.github.weisj:jsvg:2.1.0")
     implementation("org.jsoup:jsoup:1.18.1")
     implementation("io.netty:netty-codec-socks:4.1.112.Final")
