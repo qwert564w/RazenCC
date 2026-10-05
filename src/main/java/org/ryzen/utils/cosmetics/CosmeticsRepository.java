@@ -95,10 +95,9 @@ public final class CosmeticsRepository {
 
    private static void collect(Path root, Path dir, int depth) {
       if (depth <= 4 && Files.isDirectory(dir) && !isHidden(dir)) {
-         Path avatarFile = dir.resolve("avatar.json");
-         if (Files.isRegularFile(avatarFile)) {
+         if (Files.isRegularFile(dir.resolve("avatar.json"))) {
             if (!dir.equals(root)) {
-               LOGGER.info("Found valid model folder: {}", dir.toAbsolutePath());
+               LOGGER.info("Found valid cosmetic model at: {}", dir.toAbsolutePath());
                ENTRIES.add(toEntry(root, dir));
             }
          } else {
@@ -157,17 +156,9 @@ public final class CosmeticsRepository {
          extracted = true;
 
          try {
-            label65: {
-               try (Stream<Path> existing = Files.list(target)) {
-                  if (!existing.findAny().isPresent()) {
-                     break label65;
-                  }
-               }
-
-               return;
-            }
+            Files.createDirectories(target);
          } catch (Exception exception) {
-            LOGGER.error("Failed to check cosmetics folder for extraction", exception);
+            LOGGER.error("Could not create cosmetics folder", exception);
             return;
          }
 
@@ -187,8 +178,13 @@ public final class CosmeticsRepository {
    }
 
    private static List<String> readIndex() {
-      InputStream fabricIndexStream = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen").flatMap(c -> c.findPath("ryzen/cosmetics.index")).map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } }).orElse(null);
-      try (InputStream in = fabricIndexStream != null ? fabricIndexStream : CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics.index")) {
+      InputStream in = null;
+      try {
+         in = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen")
+            .flatMap(c -> c.findPath("ryzen/cosmetics.index"))
+            .map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } })
+            .orElseGet(() -> CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics.index"));
+         
          if (in == null) {
             LOGGER.error("No bundled cosmetics index on the classpath at {}", "/ryzen/cosmetics.index");
             return List.of();
@@ -196,7 +192,7 @@ public final class CosmeticsRepository {
 
          List<String> lines = new ArrayList<>();
 
-         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("\\n")) {
+         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("\n")) {
             String trimmed = line.strip();
             if (!trimmed.isEmpty()) {
                lines.add(trimmed);
@@ -207,6 +203,10 @@ public final class CosmeticsRepository {
       } catch (Exception exception) {
          LOGGER.error("Failed to read the bundled cosmetics index", exception);
          return List.of();
+      } finally {
+         if (in != null) {
+            try { in.close(); } catch (Exception ignored) {}
+         }
       }
    }
 
@@ -216,8 +216,7 @@ public final class CosmeticsRepository {
          return false;
       }
 
-      InputStream fabricBundledStream = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen").flatMap(c -> c.findPath("ryzen/cosmetics/" + relative)).map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } }).orElse(null);
-      try (InputStream in = fabricBundledStream != null ? fabricBundledStream : CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics/" + relative)) {
+      try (InputStream in = CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics/" + relative)) {
          if (in == null) {
             return false;
          }
