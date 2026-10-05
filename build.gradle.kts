@@ -34,10 +34,18 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.34")
     annotationProcessor("org.projectlombok:lombok:1.18.34")
 
+    // Это нужно, чтобы MixinExtras встроился в мод
     include("io.github.llamalad7:mixinextras-fabric:0.5.4")
     modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
 
-    implementation(fileTree("src/main/java/META-INF/jars") { include("*.jar") })
+    // ВАЖНО: используем include(files(...)) для всех вложенных модов из META-INF/jars.
+    // Это заставляет Loom физически упаковать их в финальный JAR в папку META-INF/jars 
+    // и корректно обработать секцию "jars" в fabric.mod.json.
+    val nestedJars = fileTree("src/main/java/META-INF/jars") { include("*.jar") }
+    nestedJars.files.forEach { jarFile ->
+        include(files(jarFile))
+        modImplementation(files(jarFile))
+    }
 
     implementation("com.github.weisj:jsvg:2.1.0")
     implementation("org.jsoup:jsoup:1.18.3")
