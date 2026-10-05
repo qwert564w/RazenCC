@@ -11,6 +11,7 @@ import org.ryzen.context.RotationContext;
 import org.ryzen.utils.combat.rotations.AuraRotation;
 
 import java.util.List;
+import java.util.Random;
 
 @Environment(EnvType.CLIENT)
 public final class NeuroRotation implements AuraRotation {
@@ -20,10 +21,23 @@ public final class NeuroRotation implements AuraRotation {
     private float currentPitch;
     private boolean initialized;
 
+    // Statistics from trained data
     private float avgYawSpeed = 4.5F;
     private float avgPitchSpeed = 2.0F;
     private float maxYawSpeed = 8.0F;
     private float maxPitchSpeed = 4.0F;
+
+    // Biological noise state (Ornstein-Uhlenbeck process)
+    private float bioNoiseYaw = 0.0F;
+    private float bioNoisePitch = 0.0F;
+    private static final float BIO_THETA = 0.15F;  // Mean reversion speed
+    private static final float BIO_SIGMA_YAW = 0.08F;   // Volatility yaw
+    private static final float BIO_SIGMA_PITCH = 0.04F; // Volatility pitch
+    private final Random bioRandom = new Random();
+
+    // GCD snap state
+    private float lastGcdYaw = 0.0F;
+    private float lastGcdPitch = 0.0F;
 
     public void setData(NeuroRotationData data) {
         this.data = data;
@@ -73,6 +87,18 @@ public final class NeuroRotation implements AuraRotation {
         }
     }
 
+    // Ornstein-Uhlenbeck process for biological tremor
+    private float ouStep(float current, float theta, float sigma, float dt) {
+        double dW = bioRandom.nextGaussian() * Math.sqrt(dt);
+        return current + theta * (0.0F - current) * dt + sigma * (float) dW;
+    }
+
+    // GCD-quantized noise (срыв сенсы)
+    private float quantizeToGcd(float value, float gcdStep) {
+        if (gcdStep <= 0.0F) return value;
+        return Math.round(value / gcdStep) * gcdStep;
+    }
+
     @Override
     public void tick(class_746 player, class_1309 target, class_243 targetEyePos, boolean attackLikely) {
         if (target == null || player == null) return;
@@ -101,7 +127,7 @@ public final class NeuroRotation implements AuraRotation {
             speedPitch = attackLikely ? 2.5F : 1.5F;
         }
 
-        float jitter = (float) (Math.random() * 0.3 - 0.15);
+        float jitter = (float) (bioRandom.nextGaussian() * 0.1);
         speedYaw *= (1.0F + jitter);
         speedPitch *= (1.0F + jitter * 0.5F);
 
@@ -117,21 +143,37 @@ public final class NeuroRotation implements AuraRotation {
             pitchStep *= 0.5F;
         }
 
-        float microYaw = (float) (Math.random() * 0.08 - 0.04);
-        float microPitch = (float) (Math.random() * 0.04 - 0.02);
+        // Biological noise (Ornstein-Uhlenbeck)
+        bioNoiseYaw = ouStep(bioNoiseYaw, BIO_THETA, BIO_SIGMA_YAW, 1.0F);
+        bioNoisePitch = ouStep(bioNoisePitch, BIO_THETA, BIO_SIGMA_PITCH, 1.0F);
 
-        currentYaw += yawStep + microYaw;
-        currentPitch = Math.max(-90.0F, Math.min(90.0F, currentPitch + pitchStep + microPitch));
+        currentYaw += yawStep + bioNoiseYaw;
+        currentPitch = Math.max(-90.0F, Math.min(90.0F, currentPitch + pitchStep + bioNoisePitch));
 
+        // GCD snap with quantized jitter (срыв сенсы)
         float step = gcdStep();
         if (step > 0.0F) {
             float playerYaw = RotationContext.isActive() ? RotationContext.getFreeYaw() : player.method_36454();
             float playerPitch = RotationContext.isActive() ? RotationContext.getFreePitch() : player.method_36455();
             float deltaYaw = class_3532.method_15393(currentYaw - playerYaw);
             float deltaPitch = currentPitch - playerPitch;
-            deltaYaw = Math.round(deltaYaw / step) * step;
-            deltaPitch = Math.round(deltaPitch / step) * step;
-            RotationContext.setRotation(playerYaw + deltaYaw, Math.max(-90.0F, Math.min(90.0F, playerPitch + deltaPitch)));
+
+            // Quantize main rotation to GCD
+            deltaYaw = quantizeToGcd(deltaYaw, step);
+            deltaPitch = quantizeToGcd(deltaPitch, step);
+
+            // Add GCD-quantized micro-jitter for biological feel
+            float gcdJitterYaw = quantizeToGcd((float)(bioRandom.nextGaussian() * step * 0.3F), step);
+            float gcdJitterPitch = quantizeToGcd((float)(bioRandom.nextGaussian() * step * 0.2F), step);
+
+            float finalYaw = playerYaw + deltaYaw + gcdJitterYaw;
+            float finalPitch = Math.max(-90.0F, Math.min(90.0F, playerPitch + deltaPitch + gcdJitterPitch));
+
+            // Track last GCD position for smooth interpolation
+            lastGcdYaw = finalYaw;
+            lastGcdPitch = finalPitch;
+
+            RotationContext.setRotation(finalYaw, finalPitch);
         } else {
             RotationContext.setRotation(currentYaw, currentPitch);
         }
@@ -139,12 +181,19 @@ public final class NeuroRotation implements AuraRotation {
 
     @Override
     public void onAttack() {
+        // Spike biological noise on attack (adrenaline tremor)
+        bioNoiseYaw += (float)(bioRandom.nextGaussian() * 0.15F);
+        bioNoisePitch += (float)(bioRandom.nextGaussian() * 0.08F);
     }
 
     @Override
     public void reset() {
         currentYaw = 0;
         currentPitch = 0;
+        bioNoiseYaw = 0;
+        bioNoisePitch = 0;
+        lastGcdYaw = 0;
+        lastGcdPitch = 0;
         initialized = false;
     }
 

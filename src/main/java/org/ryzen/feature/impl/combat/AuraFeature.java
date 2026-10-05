@@ -168,7 +168,7 @@ public final class AuraFeature extends Feature implements MinecraftContext {
 
    @Override
    protected void onDisable() {
-      this.resetCombatState(mc.field_1724);
+      this.resetCombatStateKeepCamera(mc.field_1724);
    }
 
    @EventTarget
@@ -479,8 +479,22 @@ public final class AuraFeature extends Feature implements MinecraftContext {
       this.attackController.reset(player);
    }
 
+   private void resetCombatStateKeepCamera(class_746 player) {
+      this.clearRotationStateKeepCamera();
+      SprintManager.reset();
+      this.target = null;
+      this.targetGraced = false;
+      this.timing.reset();
+      this.attackController.reset(player);
+   }
+
    private void clearRotationState() {
       RotationContext.clear();
+      this.resetRotations();
+   }
+
+   private void clearRotationStateKeepCamera() {
+      RotationContext.clearKeepCamera();
       this.resetRotations();
    }
 

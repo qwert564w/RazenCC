@@ -120,6 +120,14 @@ public final class RotationContext implements MinecraftContext {
       hasLastAngle = false;
    }
 
+   public static void clearKeepCamera() {
+      // Keep the camera at the last rotation position (don't reset to player's current angles)
+      // This allows the camera to stay where the aura was looking when disabled
+      active = false;
+      hasLastAngle = false;
+      // Don't reset freeYaw/freePitch - keep them at last values
+   }
+
    private static void rememberRenderAngles(class_746 player) {
       lastYaw = player.method_36454();
       lastPitch = player.method_36455();

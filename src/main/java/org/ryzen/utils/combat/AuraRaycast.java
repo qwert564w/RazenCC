@@ -90,7 +90,9 @@ public final class AuraRaycast {
    }
 
    private static List<class_243> aimCandidates(class_238 box, class_243 eye, double predictedEyeY) {
-      List<class_243> points = new ArrayList<>(30);
+      List<class_243> points = new ArrayList<>(85);
+
+      // Priority points (closest to eye level)
       points.add(
          new class_243(
             class_3532.method_15350(eye.field_1352, box.field_1323, box.field_1320),
@@ -106,11 +108,14 @@ public final class AuraRaycast {
             (box.field_1321 + box.field_1324) * 0.5
          )
       );
-      double[] factors = new double[]{0.1, 0.5, 0.9};
 
-      for (double x : factors) {
-         for (double y : factors) {
-            for (double z : factors) {
+      // Body zones: head, upper body, center, lower body, legs
+      double[] yFactors = new double[]{0.05, 0.2, 0.35, 0.5, 0.65, 0.8, 0.95};
+      double[] xzFactors = new double[]{0.2, 0.4, 0.5, 0.6, 0.8};
+
+      for (double y : yFactors) {
+         for (double x : xzFactors) {
+            for (double z : xzFactors) {
                points.add(
                   new class_243(
                      class_3532.method_16436(x, box.field_1323, box.field_1320),
@@ -119,6 +124,41 @@ public final class AuraRaycast {
                   )
                );
             }
+         }
+      }
+
+      // Edge points (corners and edges of hitbox)
+      double[] edgeFactors = new double[]{0.0, 1.0};
+      double[] midFactors = new double[]{0.5};
+
+      for (double x : edgeFactors) {
+         for (double y : midFactors) {
+            for (double z : edgeFactors) {
+               points.add(
+                  new class_243(
+                     class_3532.method_16436(x, box.field_1323, box.field_1320),
+                     class_3532.method_16436(y, box.field_1322, box.field_1325),
+                     class_3532.method_16436(z, box.field_1321, box.field_1324)
+                  )
+               );
+            }
+         }
+      }
+
+      // Biomechanical offsets (simulate human aiming imperfection)
+      double centerX = (box.field_1323 + box.field_1320) * 0.5;
+      double centerZ = (box.field_1321 + box.field_1324) * 0.5;
+      double[] offsets = new double[]{-0.1, 0.1};
+
+      for (double dx : offsets) {
+         for (double dz : offsets) {
+            points.add(
+               new class_243(
+                  centerX + dx,
+                  class_3532.method_15350(predictedEyeY, box.field_1322, box.field_1325),
+                  centerZ + dz
+               )
+            );
          }
       }
 

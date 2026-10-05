@@ -6,12 +6,15 @@ import net.minecraft.class_1802;
 import net.minecraft.class_3532;
 import net.minecraft.class_746;
 
+import java.util.Random;
+
 @Environment(EnvType.CLIENT)
 public final class AttackTiming {
-   private static final int[] PATTERN = new int[]{10, 10, 10, 13};
+   private static final int[] BASE_PATTERN = new int[]{10, 10, 10, 13};
    private static final float READY_CHARGE = 0.9F;
    private int extraDelayTicks;
    private int hitCounter;
+   private final Random bioRandom = new Random();
 
    public void tick() {
       if (this.extraDelayTicks > 0) {
@@ -20,7 +23,16 @@ public final class AttackTiming {
    }
 
    public void onSwingPacket(boolean usePattern, boolean tpsSync) {
-      float pattern = usePattern ? PATTERN[this.hitCounter % PATTERN.length] : 0.0F;
+      float pattern;
+      if (usePattern) {
+         int base = BASE_PATTERN[this.hitCounter % BASE_PATTERN.length];
+         // Biological noise: +/- 1-2 ticks with gaussian distribution
+         float noise = (float) (bioRandom.nextGaussian() * 1.2);
+         pattern = Math.max(8, base + noise);
+      } else {
+         pattern = 0.0F;
+      }
+
       float scale = 1.0F;
       if (tpsSync) {
          float tps = class_3532.method_15363(ServerTickSync.INSTANCE.effectiveTps(), 1.0F, 20.0F);
