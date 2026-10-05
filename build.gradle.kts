@@ -37,11 +37,10 @@ dependencies {
     include("io.github.llamalad7:mixinextras-fabric:0.5.4")
     modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
 
+    // Для файлов из META-INF/jars используем только modImplementation, без include.
+    // Loom должен сам скопировать их в финальный JAR на основе секции "jars" в fabric.mod.json.
     val nestedJars = fileTree("src/main/java/META-INF/jars") { include("*.jar") }
-    nestedJars.files.forEach { jarFile ->
-        include(files(jarFile))
-        modImplementation(files(jarFile))
-    }
+    modImplementation(nestedJars)
 
     implementation("com.github.weisj:jsvg:2.1.0")
     implementation("org.jsoup:jsoup:1.18.3")
