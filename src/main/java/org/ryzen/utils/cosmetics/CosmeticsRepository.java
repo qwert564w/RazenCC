@@ -184,7 +184,8 @@ public final class CosmeticsRepository {
    }
 
    private static List<String> readIndex() {
-      try (InputStream in = CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics.index")) {
+      InputStream fabricIndexStream = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen").flatMap(c -> c.findPath("ryzen/cosmetics.index")).map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } }).orElse(null);
+      try (InputStream in = fabricIndexStream != null ? fabricIndexStream : CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics.index")) {
          if (in == null) {
             LOGGER.warn("No bundled cosmetics index on the classpath at {}", "/ryzen/cosmetics.index");
             return List.of();
@@ -212,7 +213,8 @@ public final class CosmeticsRepository {
          return false;
       }
 
-      try (InputStream in = CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics/" + relative)) {
+      InputStream fabricBundledStream = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen").flatMap(c -> c.findPath("ryzen/cosmetics/" + relative)).map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } }).orElse(null);
+      try (InputStream in = fabricBundledStream != null ? fabricBundledStream : CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics/" + relative)) {
          if (in == null) {
             return false;
          }
