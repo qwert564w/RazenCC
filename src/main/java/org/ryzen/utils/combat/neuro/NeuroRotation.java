@@ -137,7 +137,7 @@ public final class NeuroRotation implements AuraRotation {
         double speed = Math.sqrt(targetVelocity.field_1352 * targetVelocity.field_1352 + targetVelocity.field_1351 * targetVelocity.field_1351 + targetVelocity.field_1350 * targetVelocity.field_1350);
 
         double maxPred = 0.8;
-        double predFactor = class_3532.method_15363(speed * 2.5, 0.0, maxPred);
+        double predFactor = class_3532.method_15363((float)(speed * 2.5), 0.0F, (float)maxPred);
         predictedPos = vecAdd(currentPos, vecScale(targetVelocity, predFactor));
     }
 
@@ -147,7 +147,7 @@ public final class NeuroRotation implements AuraRotation {
         double dz = targetVelocity.field_1350;
         double speed = Math.sqrt(dx*dx + dy*dy + dz*dz);
 
-        double stabilityD = class_3532.method_15363(speed * 4.0, 0.0, 1.0);
+        double stabilityD = class_3532.method_15363((float)(speed * 4.0), 0.0F, 1.0F);
         float stability = 1.0F - (float)stabilityD;
         holdTimeTarget = (int) (40 + stability * 110);
 
@@ -199,7 +199,7 @@ public final class NeuroRotation implements AuraRotation {
         aim = new class_243(aim.field_1352 - rightZ * depthMod * width, aim.field_1351, aim.field_1350 + rightX * depthMod * width);
 
         if (predictedPos != null && currentState != State.CORRECTING) {
-            double blendD = class_3532.method_15363(speed * 1.5, 0.0, 0.6);
+            double blendD = class_3532.method_15363((float)(speed * 1.5), 0.0F, 0.6F);
             double blend = blendD;
             class_243 diff = vecSub(predictedPos, aim);
             aim = vecAdd(aim, vecScale(diff, blend));
@@ -289,8 +289,8 @@ public final class NeuroRotation implements AuraRotation {
             maxPitchStep = 2.0F + errorMag * 0.05F;
         }
 
-        maxYawStep = (float)class_3532.method_15363((double)maxYawStep, 4.0, 7.5);
-        maxPitchStep = (float)class_3532.method_15363((double)maxPitchStep, 1.5, 3.5);
+        maxYawStep = class_3532.method_15363(maxYawStep, 4.0F, 7.5F);
+        maxPitchStep = class_3532.method_15363(maxPitchStep, 1.5F, 3.5F);
 
         yawVelocity = step(yawVelocity, yawError, 0.45F, 0.82F, 0.55F, maxYawStep, 0.25F, true, reactionFactor);
         pitchVelocity = step(pitchVelocity, pitchError, 0.35F, 0.85F, 0.35F, maxPitchStep, 0.18F, false, reactionFactor);
@@ -394,7 +394,7 @@ public final class NeuroRotation implements AuraRotation {
     }
 
     private static float clampPitch(float pitch) {
-        return (float)class_3532.method_15363(pitch, -90.0, 90.0);
+        return class_3532.method_15363(pitch, -90.0F, 90.0F);
     }
 
     @Override
