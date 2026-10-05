@@ -84,7 +84,7 @@ public final class CosmeticsRepository {
       try {
          Files.createDirectories(root);
       } catch (Exception exception) {
-         LOGGER.warn("Could not create the cosmetics folder at {}", root, exception);
+         LOGGER.error("Could not create the cosmetics folder at {}", root, exception);
          return;
       }
 
@@ -95,8 +95,10 @@ public final class CosmeticsRepository {
 
    private static void collect(Path root, Path dir, int depth) {
       if (depth <= 4 && Files.isDirectory(dir) && !isHidden(dir)) {
-         if (Files.isRegularFile(dir.resolve("avatar.json"))) {
+         Path avatarFile = dir.resolve("avatar.json");
+         if (Files.isRegularFile(avatarFile)) {
             if (!dir.equals(root)) {
+               LOGGER.info("Found valid model folder: {}", dir.toAbsolutePath());
                ENTRIES.add(toEntry(root, dir));
             }
          } else {
@@ -105,7 +107,7 @@ public final class CosmeticsRepository {
                   collect(root, child, depth + 1);
                }
             } catch (Exception exception) {
-               LOGGER.debug("Skipping unreadable cosmetics folder {}", dir, exception);
+               LOGGER.error("Skipping unreadable cosmetics folder {}", dir, exception);
             }
          }
       }
@@ -117,7 +119,7 @@ public final class CosmeticsRepository {
    }
 
    private static CosmeticEntry toEntry(Path root, Path dir) {
-      String id = root.relativize(dir).toString().replace('\\', '/');
+      String id = root.relativize(dir).toString().replace('\', '/');
       int slash = id.indexOf(47);
       String top = slash < 0 ? id : id.substring(0, slash);
       String lower = top.toLowerCase(Locale.ROOT);
@@ -165,6 +167,7 @@ public final class CosmeticsRepository {
                return;
             }
          } catch (Exception exception) {
+            LOGGER.error("Failed to check cosmetics folder for extraction", exception);
             return;
          }
 
@@ -187,13 +190,14 @@ public final class CosmeticsRepository {
       InputStream fabricIndexStream = net.fabricmc.loader.api.FabricLoader.getInstance().getModContainer("ryzen").flatMap(c -> c.findPath("ryzen/cosmetics.index")).map(p -> { try { return java.nio.file.Files.newInputStream(p); } catch (Exception e) { return null; } }).orElse(null);
       try (InputStream in = fabricIndexStream != null ? fabricIndexStream : CosmeticsRepository.class.getResourceAsStream("/ryzen/cosmetics.index")) {
          if (in == null) {
-            LOGGER.warn("No bundled cosmetics index on the classpath at {}", "/ryzen/cosmetics.index");
+            LOGGER.error("No bundled cosmetics index on the classpath at {}", "/ryzen/cosmetics.index");
             return List.of();
          }
 
          List<String> lines = new ArrayList<>();
 
-         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("\n")) {
+         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("
+")) {
             String trimmed = line.strip();
             if (!trimmed.isEmpty()) {
                lines.add(trimmed);
@@ -223,7 +227,7 @@ public final class CosmeticsRepository {
          Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
          return true;
       } catch (Exception exception) {
-         LOGGER.debug("Skipped bundled cosmetic file {}", relative, exception);
+         LOGGER.error("Skipped bundled cosmetic file {}", relative, exception);
          return false;
       }
    }
@@ -261,7 +265,7 @@ public final class CosmeticsRepository {
          entry.setPreview(id, image.method_4307(), image.method_4323());
          return id;
       } catch (Exception exception) {
-         LOGGER.debug("No usable preview for cosmetic {}", entry.id(), exception);
+         LOGGER.error("No usable preview for cosmetic {}", entry.id(), exception);
          return null;
       }
    }
