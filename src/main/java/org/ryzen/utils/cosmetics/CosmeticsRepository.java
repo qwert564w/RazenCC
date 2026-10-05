@@ -119,7 +119,7 @@ public final class CosmeticsRepository {
    }
 
    private static CosmeticEntry toEntry(Path root, Path dir) {
-      String id = root.relativize(dir).toString().replace('\', '/');
+      String id = root.relativize(dir).toString().replace('\\', '/');
       int slash = id.indexOf(47);
       String top = slash < 0 ? id : id.substring(0, slash);
       String lower = top.toLowerCase(Locale.ROOT);
@@ -196,8 +196,7 @@ public final class CosmeticsRepository {
 
          List<String> lines = new ArrayList<>();
 
-         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("
-")) {
+         for (String line : new String(in.readAllBytes(), StandardCharsets.UTF_8).split("\\n")) {
             String trimmed = line.strip();
             if (!trimmed.isEmpty()) {
                lines.add(trimmed);
