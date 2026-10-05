@@ -2,29 +2,43 @@ name: Build JAR
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: ["main", "master"]
   workflow_dispatch:
+
+concurrency:
+  group: razencc-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    permissions:
+      contents: read
 
-      - name: Force executable permissions
-        run: |
-          chmod +x gradlew
-          ls -la gradlew
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          java-version: "21"
+          distribution: "temurin"
 
-      - name: Build with Gradle
-        run: ./gradlew build --no-daemon --stacktrace
+      - name: Normalize gradlew
+        run: |
+          sed -i 's/\r$//' gradlew
+          chmod +x gradlew
+
+      - name: Show toolchain
+        run: |
+          java -version
+          ./gradlew --version
+
+      - name: Build
+        env:
+          GRADLE_OPTS: "-Xmx4g -XX:MaxMetaspaceSize=1g -Dfile.encoding=UTF-8"
+        run: ./gradlew build --no-daemon --stacktrace --refresh-dependencies
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
