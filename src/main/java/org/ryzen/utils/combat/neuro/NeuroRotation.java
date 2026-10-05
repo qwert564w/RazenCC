@@ -13,8 +13,8 @@ import org.ryzen.utils.text.ChatUtil;
 
 @Environment(EnvType.CLIENT)
 public final class NeuroRotation implements AuraRotation {
-   private static final float MAX_YAW_STEP = 90.0F;
-   private static final float MAX_PITCH_STEP = 30.0F;
+   private static final float MAX_YAW_STEP = 15.0F;
+   private static final float MAX_PITCH_STEP = 8.0F;
    private static final float JITTER_SCALE = 1.0F;
    private static final float TRACK_SCALE = 0.5F;
    private NeuroRotationData data;
@@ -64,10 +64,10 @@ public final class NeuroRotation implements AuraRotation {
          float goalYaw = goal.yaw();
          float goalPitch = goal.pitch();
          float scale = attackLikely ? 1.0F : 0.5F;
-         goalYaw += class_3532.method_15363(sampleYawDelta, -25.0F, 25.0F) * scale;
-         goalPitch += class_3532.method_15363(samplePitchDelta, -15.0F, 15.0F) * scale;
-         float yaw = moveTowardsAngle(fromYaw, goalYaw, 90.0F);
-         float pitch = fromPitch + class_3532.method_15363(goalPitch - fromPitch, -30.0F, 30.0F);
+         goalYaw += class_3532.method_15363(sampleYawDelta, -10.0F, 10.0F) * scale;
+         goalPitch += class_3532.method_15363(samplePitchDelta, -6.0F, 6.0F) * scale;
+         float yaw = moveTowardsAngle(fromYaw, goalYaw, 15.0F);
+         float pitch = fromPitch + class_3532.method_15363(goalPitch - fromPitch, -8.0F, 8.0F);
          NeuroRotation.Rotation corrected = correctRotation(fromYaw, fromPitch, yaw, pitch);
          RotationContext.setRotation(corrected.yaw(), corrected.pitch());
       }
