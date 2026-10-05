@@ -216,8 +216,14 @@ public final class AuraFeature extends Feature implements MinecraftContext {
             this.timing.tick();
             class_746 player = event.getPlayer();
             if (player != null && this.target != null && this.target.method_5805()) {
-               if (this.canAttack(player, 1)) {
+               boolean readyNow = this.canAttack(player, 0);
+               boolean readySoon = this.canAttack(player, 1);
+               if ((readyNow || readySoon) && !SprintManager.isImminent()) {
                   SprintManager.markAttackImminent();
+               } else if (!readyNow && !readySoon) {
+                  SprintManager.reset();
+               }
+               if (readySoon || readyNow) {
                   if (this.releaseShield.getValue()) {
                      this.attackController.releaseShieldBeforeAttack(player);
                   }

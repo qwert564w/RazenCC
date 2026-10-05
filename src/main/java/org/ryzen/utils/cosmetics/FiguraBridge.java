@@ -2,6 +2,7 @@ package org.ryzen.utils.cosmetics;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.util.UUID;
 import net.fabricmc.api.EnvType;
@@ -22,6 +23,7 @@ public final class FiguraBridge {
    private static Boolean available;
    private static Method loadLocalAvatar;
    private static Method clearAvatars;
+   private static Object avatarManagerInstance;
    private static String appliedId = "";
 
    private FiguraBridge() {
@@ -31,23 +33,81 @@ public final class FiguraBridge {
       if (available == null) {
          available = resolve();
       }
-
       return available;
+   }
+
+   private static Method findMethod(Class<?> clazz, String name, Class<?>[]... signatures) {
+      for (Class<?>[] sig : signatures) {
+         try {
+            return clazz.getMethod(name, sig);
+         } catch (NoSuchMethodException ignored) {
+         }
+      }
+      for (Method m : clazz.getDeclaredMethods()) {
+         if (m.getName().equals(name)) {
+            LOGGER.debug("FiguraBridge: found method {} via declared scan, params={}", name, java.util.Arrays.toString(m.getParameterTypes()));
+            m.setAccessible(true);
+            return m;
+         }
+      }
+      return null;
    }
 
    private static boolean resolve() {
       if (!FabricLoader.getInstance().isModLoaded("figura")) {
+         LOGGER.debug("FiguraBridge: figura mod not loaded");
          return false;
       }
 
       try {
-         Class<?> manager = Class.forName("org.figuramc.figura.avatar.AvatarManager");
-         loadLocalAvatar = manager.getMethod("loadLocalAvatar", Path.class);
-         clearAvatars = manager.getMethod("clearAvatars", UUID.class);
+         Class<?> manager = Class.forName(AVATAR_MANAGER);
+
+         loadLocalAvatar = findMethod(manager, "loadLocalAvatar",
+            new Class<?>[]{Path.class},
+            new Class<?>[]{Path.class, boolean.class});
+
+         clearAvatars = findMethod(manager, "clearAvatars",
+            new Class<?>[]{UUID.class},
+            new Class<?>[]{});
+
+         if (loadLocalAvatar == null) {
+            LOGGER.error("FiguraBridge: could not find loadLocalAvatar method in AvatarManager");
+            return false;
+         }
+
+         LOGGER.debug("FiguraBridge: loadLocalAvatar found: static={}, params={}",
+            Modifier.isStatic(loadLocalAvatar.getModifiers()),
+            java.util.Arrays.toString(loadLocalAvatar.getParameterTypes()));
+
+         if (clearAvatars != null) {
+            LOGGER.debug("FiguraBridge: clearAvatars found: static={}, params={}",
+               Modifier.isStatic(clearAvatars.getModifiers()),
+               java.util.Arrays.toString(clearAvatars.getParameterTypes()));
+         }
+
+         if (!Modifier.isStatic(loadLocalAvatar.getModifiers()) ||
+             (clearAvatars != null && !Modifier.isStatic(clearAvatars.getModifiers()))) {
+            try {
+               Method getInstance = manager.getMethod("getInstance");
+               avatarManagerInstance = getInstance.invoke(null);
+               LOGGER.debug("FiguraBridge: obtained AvatarManager instance via getInstance()");
+            } catch (Exception e) {
+               try {
+                  Field instanceField = manager.getField("INSTANCE");
+                  avatarManagerInstance = instanceField.get(null);
+                  LOGGER.debug("FiguraBridge: obtained AvatarManager instance via INSTANCE field");
+               } catch (Exception e2) {
+                  LOGGER.warn("FiguraBridge: could not obtain AvatarManager instance", e2);
+               }
+            }
+         }
+
          return true;
-      } catch (Exception ignored) {
+      } catch (Exception exception) {
+         LOGGER.error("FiguraBridge: resolve failed", exception);
          loadLocalAvatar = null;
          clearAvatars = null;
+         avatarManagerInstance = null;
          return false;
       }
    }
@@ -56,9 +116,8 @@ public final class FiguraBridge {
       if (!FabricLoader.getInstance().isModLoaded("figura")) {
          return false;
       }
-
       try {
-         Object popupButton = Class.forName("org.figuramc.figura.config.Configs").getField("POPUP_BUTTON").get(null);
+         Object popupButton = Class.forName(CONFIGS).getField("POPUP_BUTTON").get(null);
          if (popupButton.getClass().getField("keyBind").get(popupButton) instanceof class_304 mapping && !mapping.method_1415()) {
             mapping.method_1422(class_3675.field_16237);
             class_304.method_1426();
@@ -76,14 +135,12 @@ public final class FiguraBridge {
       if (!FabricLoader.getInstance().isModLoaded("figura")) {
          return false;
       }
-
       try {
-         Object config = Class.forName("org.figuramc.figura.config.Configs").getField("FIRST_PERSON_MATRICES").get(null);
+         Object config = Class.forName(CONFIGS).getField("FIRST_PERSON_MATRICES").get(null);
          Field value = config.getClass().getField("value");
          if (Boolean.FALSE.equals(value.get(config))) {
             return false;
          }
-
          value.set(config, Boolean.FALSE);
          return true;
       } catch (Exception exception) {
@@ -124,7 +181,20 @@ public final class FiguraBridge {
             CosmeticFirstPerson.installHide(entry.folder());
          }
 
-         loadLocalAvatar.invoke(null, entry.folder());
+         Object target = Modifier.isStatic(loadLocalAvatar.getModifiers()) ? null : avatarManagerInstance;
+         Class<?>[] paramTypes = loadLocalAvatar.getParameterTypes();
+
+         LOGGER.debug("FiguraBridge: invoking loadLocalAvatar with target={}, paramCount={}", target, paramTypes.length);
+
+         if (paramTypes.length == 1) {
+            loadLocalAvatar.invoke(target, entry.folder());
+         } else if (paramTypes.length == 2) {
+            loadLocalAvatar.invoke(target, entry.folder(), true);
+         } else {
+            LOGGER.error("FiguraBridge: unexpected loadLocalAvatar param count: {}", paramTypes.length);
+            return false;
+         }
+
          appliedId = entry.id();
          LOGGER.info("Successfully loaded avatar for cosmetic '{}'.", entry.id());
          return true;
@@ -137,8 +207,22 @@ public final class FiguraBridge {
    public static boolean clear() {
       appliedId = "";
       if (isAvailable() && MinecraftContext.mc.field_1724 != null) {
+         if (clearAvatars == null) {
+            LOGGER.warn("FiguraBridge: clearAvatars method not found, skipping clear");
+            return true;
+         }
          try {
-            clearAvatars.invoke(null, MinecraftContext.mc.field_1724.method_5667());
+            Object target = Modifier.isStatic(clearAvatars.getModifiers()) ? null : avatarManagerInstance;
+            Class<?>[] paramTypes = clearAvatars.getParameterTypes();
+
+            if (paramTypes.length == 1) {
+               clearAvatars.invoke(target, MinecraftContext.mc.field_1724.method_5667());
+            } else if (paramTypes.length == 0) {
+               clearAvatars.invoke(target);
+            } else {
+               LOGGER.error("FiguraBridge: unexpected clearAvatars param count: {}", paramTypes.length);
+               return false;
+            }
             return true;
          } catch (Exception exception) {
             LOGGER.error("Failed to clear the applied cosmetic", exception);
