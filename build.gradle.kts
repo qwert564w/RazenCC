@@ -46,6 +46,9 @@ dependencies {
 }
 
 loom {
+    @Suppress("UnstableApiUsage")
+    enableModProvidedJavadoc.set(false)
+    
     mods {
         create("ryzen") {
             sourceSet(sourceSets.main.get())
