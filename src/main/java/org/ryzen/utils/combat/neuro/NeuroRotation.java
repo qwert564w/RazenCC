@@ -16,7 +16,6 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public final class NeuroRotation implements AuraRotation {
 
-    // --- Existing Data Hooks (to satisfy NeuroManager compilation) ---
     private NeuroRotationData data;
     private boolean warnedEmpty;
 
@@ -33,13 +32,11 @@ public final class NeuroRotation implements AuraRotation {
         return this.data != null && this.data.sampleCount() > 0;
     }
 
-    // --- Neuro Controller State ---
     private enum State { TRACKING, STABILIZING, ATTACKING, CORRECTING, RECOVERING }
     private State currentState = State.TRACKING;
 
     private long seed = System.nanoTime();
 
-    // Motor Control
     private float yawVelocity = 0.0F;
     private float pitchVelocity = 0.0F;
     private float yawAcceleration = 0.0F;
@@ -50,13 +47,11 @@ public final class NeuroRotation implements AuraRotation {
     private float currentYaw = 0.0F;
     private float currentPitch = 0.0F;
 
-    // Perception
     private final List<class_243> targetHistory = new ArrayList<>();
-    private class_243 targetVelocity = class_243.field_24340;
+    private class_243 targetVelocity = new class_243(0.0, 0.0, 0.0);
     private class_243 predictedPos = null;
     private long lastDirectionChangeTime = 0;
 
-    // Intent (Multipoint)
     private enum HitZone {
         HEAD_CENTER, HEAD_SIDE, UPPER_BODY, CENTER_BODY, LOWER_BODY, SHOULDER, ARM, LEG
     }
@@ -69,16 +64,26 @@ public final class NeuroRotation implements AuraRotation {
     private double localOffsetY = 0.72;
     private double localOffsetZ = 0.0;
 
-    // Focus Distance
     private float desiredFocusDistance = 0.5F;
     private float currentFocusDistance = 0.5F;
 
-    // Attack
     private long lastCorrectionTime = 0;
 
     private double seededRandom() {
         seed = (seed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
         return (double)(seed >>> 16) / (double)(1L << 32);
+    }
+    
+    private class_243 vecAdd(class_243 a, class_243 b) {
+        return new class_243(a.field_1352 + b.field_1352, a.field_1351 + b.field_1351, a.field_1350 + b.field_1350);
+    }
+    
+    private class_243 vecSub(class_243 a, class_243 b) {
+        return new class_243(a.field_1352 - b.field_1352, a.field_1351 - b.field_1351, a.field_1350 - b.field_1350);
+    }
+    
+    private class_243 vecScale(class_243 v, double s) {
+        return new class_243(v.field_1352 * s, v.field_1351 * s, v.field_1350 * s);
     }
 
     @Override
@@ -94,13 +99,8 @@ public final class NeuroRotation implements AuraRotation {
             currentPitch = playerPitch;
         }
 
-        // --- 1. Perception ---
         updatePerception(target, now);
-
-        // --- 2. Intent (Multipoint & Focus) ---
         updateIntent(player, target, targetEyePos, now);
-
-        // --- 3. Motor Control & State Machine ---
         updateMotor(player, target, playerYaw, playerPitch, attackLikely, now);
     }
 
@@ -109,60 +109,56 @@ public final class NeuroRotation implements AuraRotation {
         if (targetHistory.isEmpty()) {
             targetHistory.add(currentPos);
         } else {
-            class_243 diff = targetHistory.get(targetHistory.size() - 1).method_1020(currentPos);
-            double distSq = diff.field_1352 * diff.field_1352 + diff.field_1351 * diff.field_1351 + diff.field_1350 * diff.field_1350;
+            class_243 last = targetHistory.get(targetHistory.size() - 1);
+            double dx = currentPos.field_1352 - last.field_1352;
+            double dy = currentPos.field_1351 - last.field_1351;
+            double dz = currentPos.field_1350 - last.field_1350;
+            double distSq = dx*dx + dy*dy + dz*dz;
             if (distSq > 0.0001) {
                 targetHistory.add(currentPos);
                 if (targetHistory.size() > 10) targetHistory.remove(0);
             }
         }
 
-        class_243 velocity = class_243.field_24340;
+        class_243 velocity = new class_243(0.0, 0.0, 0.0);
         if (targetHistory.size() >= 2) {
             class_243 prev = targetHistory.get(targetHistory.size() - 2);
-            velocity = currentPos.method_1020(prev);
+            velocity = vecSub(currentPos, prev);
         }
         
-        // Reaction Delay: detect direction change
         double dot = targetVelocity.field_1352 * velocity.field_1352 + targetVelocity.field_1350 * velocity.field_1350;
         double vSpeed = Math.sqrt(velocity.field_1352 * velocity.field_1352 + velocity.field_1350 * velocity.field_1350);
         if (dot < 0 && vSpeed > 0.05) {
             lastDirectionChangeTime = now;
         }
         
-        targetVelocity = targetVelocity.method_1020(velocity).method_1022(0.6).method_1019(velocity.method_1022(0.4));
+        targetVelocity = vecAdd(vecScale(targetVelocity, 0.6), vecScale(velocity, 0.4));
         
-        double dx = targetVelocity.field_1352;
-        double dy = targetVelocity.field_1351;
-        double dz = targetVelocity.field_1350;
-        double speed = Math.sqrt(dx*dx + dy*dy + dz*dz);
+        double speed = Math.sqrt(targetVelocity.field_1352 * targetVelocity.field_1352 + targetVelocity.field_1351 * targetVelocity.field_1351 + targetVelocity.field_1350 * targetVelocity.field_1350);
         
         double maxPred = 0.8;
         double predFactor = class_3532.method_15363(speed * 2.5, 0.0, maxPred);
-        predictedPos = currentPos.method_1019(targetVelocity.method_1022(predFactor));
+        predictedPos = vecAdd(currentPos, vecScale(targetVelocity, predFactor));
     }
 
     private void updateIntent(class_746 player, class_1309 target, class_243 targetEyePos, long now) {
-        // Hold time logic
         double dx = targetVelocity.field_1352;
         double dy = targetVelocity.field_1351;
         double dz = targetVelocity.field_1350;
         double speed = Math.sqrt(dx*dx + dy*dy + dz*dz);
         
         float stability = 1.0F - (float)class_3532.method_15363(speed * 4.0, 0.0, 1.0);
-        holdTimeTarget = (int) (40 + stability * 110); // 40 to 150ms
+        holdTimeTarget = (int) (40 + stability * 110);
         
         if (now - lastZoneSwitchTime > holdTimeTarget) {
             selectNextZone(now);
             lastZoneSwitchTime = now;
         }
 
-        // Focus Distance
         class_243 refPos = predictedPos != null ? predictedPos : target.method_73189();
-        class_243 toTarget = refPos.method_1020(player.method_33571());
-        double tDx = toTarget.field_1352;
-        double tDy = toTarget.field_1351;
-        double tDz = toTarget.field_1350;
+        double tDx = refPos.field_1352 - player.method_33571().field_1352;
+        double tDy = refPos.field_1351 - player.method_33571().field_1351;
+        double tDz = refPos.field_1350 - player.method_33571().field_1350;
         float targetDist = (float)Math.sqrt(tDx*tDx + tDy*tDy + tDz*tDz);
         
         float optimalFocus = 0.5F;
@@ -172,7 +168,6 @@ public final class NeuroRotation implements AuraRotation {
         desiredFocusDistance += (optimalFocus - desiredFocusDistance) * 0.05F;
         currentFocusDistance += (desiredFocusDistance - currentFocusDistance) * 0.1F;
 
-        // Calculate point
         double width = target.method_17681();
         class_243 feet = target.method_73189();
         
@@ -188,32 +183,32 @@ public final class NeuroRotation implements AuraRotation {
             case LEG: heightFactor = 0.20; localOffsetX = (seededRandom() - 0.5) * 0.3; localOffsetZ = 0; break;
         }
 
-        class_243 base = feet.method_1031(0.0, (targetEyePos.field_1351 - feet.field_1351) * heightFactor, 0.0);
+        double baseY = feet.field_1351 + (targetEyePos.field_1351 - feet.field_1351) * heightFactor;
         double yawRadians = Math.toRadians(target.method_36454());
         double rightX = Math.cos(yawRadians);
         double rightZ = Math.sin(yawRadians);
         
-        class_243 aim = base.method_1031(
-            rightX * localOffsetX * width - rightZ * localOffsetZ * width, 
-            0.0, 
-            rightZ * localOffsetX * width + rightX * localOffsetZ * width
-        );
+        double aimX = feet.field_1352 + rightX * localOffsetX * width - rightZ * localOffsetZ * width;
+        double aimY = baseY;
+        double aimZ = feet.field_1350 + rightZ * localOffsetX * width + rightX * localOffsetZ * width;
+        
+        class_243 aim = new class_243(aimX, aimY, aimZ);
 
-        // Apply focus distance (depth modifier)
         double depthMod = (currentFocusDistance - 0.5) * 0.4;
-        aim = aim.method_1031(-rightZ * depthMod * width, 0.0, rightX * depthMod * width);
+        aim = new class_243(aim.field_1352 - rightZ * depthMod * width, aim.field_1351, aim.field_1350 + rightX * depthMod * width);
 
-        // Predictive blend
         if (predictedPos != null && currentState != State.CORRECTING) {
             double blend = class_3532.method_15363(speed * 1.5, 0.0, 0.6);
-            class_243 diff = predictedPos.method_1020(aim);
-            aim = aim.method_1019(diff.method_1022(blend));
+            class_243 diff = vecSub(predictedPos, aim);
+            aim = vecAdd(aim, vecScale(diff, blend));
         }
 
-        class_243 delta = aim.method_1020(player.method_33571());
-        double horizontal = Math.sqrt(delta.field_1352 * delta.field_1352 + delta.field_1350 * delta.field_1350);
-        desiredYaw = (float)Math.toDegrees(Math.atan2(delta.field_1350, delta.field_1352)) - 90.0F;
-        desiredPitch = (float)(-Math.toDegrees(Math.atan2(delta.field_1351, horizontal)));
+        double dxAim = aim.field_1352 - player.method_33571().field_1352;
+        double dyAim = aim.field_1351 - player.method_33571().field_1351;
+        double dzAim = aim.field_1350 - player.method_33571().field_1350;
+        double horizontal = Math.sqrt(dxAim*dxAim + dzAim*dzAim);
+        desiredYaw = (float)Math.toDegrees(Math.atan2(dzAim, dxAim)) - 90.0F;
+        desiredPitch = (float)(-Math.toDegrees(Math.atan2(dyAim, horizontal)));
     }
 
     private void selectNextZone(long now) {
@@ -222,7 +217,6 @@ public final class NeuroRotation implements AuraRotation {
         while (attempts < 10) {
             double roll = seededRandom();
             if (roll < 0.45) {
-                // Small transitions
                 if (currentZone == HitZone.HEAD_CENTER || currentZone == HitZone.HEAD_SIDE) {
                     next = seededRandom() > 0.5 ? HitZone.SHOULDER : HitZone.UPPER_BODY;
                 } else if (currentZone == HitZone.UPPER_BODY || currentZone == HitZone.SHOULDER) {
@@ -231,10 +225,8 @@ public final class NeuroRotation implements AuraRotation {
                     next = HitZone.CENTER_BODY;
                 }
             } else if (roll < 0.85) {
-                // Medium transitions
                 next = HitZone.values()[(int)(seededRandom() * HitZone.values().length)];
             } else {
-                // Rare large transitions
                 next = seededRandom() > 0.5 ? HitZone.LEG : HitZone.HEAD_CENTER;
             }
 
@@ -254,7 +246,6 @@ public final class NeuroRotation implements AuraRotation {
         float pitchError = desiredPitch - currentPitch;
         float errorMag = (float)Math.sqrt(yawError * yawError + pitchError * pitchError);
 
-        // State Machine
         boolean inHitbox = isAimInHitbox(currentYaw, currentPitch, player, target);
         
         if (attackLikely && inHitbox) {
@@ -270,13 +261,11 @@ public final class NeuroRotation implements AuraRotation {
             currentState = State.TRACKING;
         }
 
-        // Reaction Delay factor
         float reactionFactor = 1.0F;
         if (now - lastDirectionChangeTime < 150) {
-            reactionFactor = 0.65F; // Delayed reaction to sudden reverse
+            reactionFactor = 0.65F;
         }
 
-        // Adaptive Speed (30-38 equivalent during attack)
         float maxYawStep = 6.0F;
         float maxPitchStep = 2.9F;
         
@@ -287,7 +276,7 @@ public final class NeuroRotation implements AuraRotation {
             
             if (now - lastCorrectionTime < 300) {
                 float t = (now - lastCorrectionTime) / 300.0F;
-                maxYawStep = 6.8F - t * 1.3F; // Gradual recovery
+                maxYawStep = 6.8F - t * 1.3F;
             }
             maxPitchStep = maxYawStep * 0.45F;
         } else if (currentState == State.CORRECTING) {
@@ -298,14 +287,12 @@ public final class NeuroRotation implements AuraRotation {
             maxPitchStep = 2.0F + errorMag * 0.05F;
         }
 
-        maxYawStep = class_3532.method_15363(maxYawStep, 4.0F, 7.5F);
-        maxPitchStep = class_3532.method_15363(maxPitchStep, 1.5F, 3.5F);
+        maxYawStep = (float)class_3532.method_15363(maxYawStep, 4.0, 7.5);
+        maxPitchStep = (float)class_3532.method_15363(maxPitchStep, 1.5, 3.5);
 
-        // Motor Model
         yawVelocity = step(yawVelocity, yawError, 0.45F, 0.82F, 0.55F, maxYawStep, 0.25F, true, reactionFactor);
         pitchVelocity = step(pitchVelocity, pitchError, 0.35F, 0.85F, 0.35F, maxPitchStep, 0.18F, false, reactionFactor);
 
-        // Deadzone for pitch
         if (Math.abs(pitchError) < 0.5F) {
             pitchVelocity *= 0.8F;
         }
@@ -316,7 +303,6 @@ public final class NeuroRotation implements AuraRotation {
         currentYaw = newYaw;
         currentPitch = clampPitch(newPitch);
 
-        // GCD Correction
         float deltaYaw = class_3532.method_15393(currentYaw - playerYaw);
         float deltaPitch = currentPitch - playerPitch;
         
@@ -329,29 +315,23 @@ public final class NeuroRotation implements AuraRotation {
         float finalYaw = playerYaw + deltaYaw;
         float finalPitch = clampPitch(playerPitch + deltaPitch);
 
-        // Safety check: if GCD pushed us out during attack, relax GCD slightly or pull back
-        if (attackLikely && !isAimInHitbox(finalYaw, finalPitch, player, target)) {
-            finalYaw = playerYaw + deltaYaw; 
-            finalPitch = clampPitch(playerPitch + deltaPitch);
-        }
-
         RotationContext.setRotation(finalYaw, finalPitch);
     }
 
     private float step(float velocity, float error, float tracking, float inertia, float acceleration, float maxStep, float jerkSmoothing, boolean yawAxis, float reactionFactor) {
-        float wanted = class_3532.method_15363(error * tracking * reactionFactor, -maxStep, maxStep);
+        float wanted = (float)class_3532.method_15363(error * tracking * reactionFactor, -maxStep, maxStep);
         float blended = velocity * inertia + wanted * (1.0F - inertia);
         float requestedAcceleration = blended - velocity;
         float previousAcceleration = yawAxis ? yawAcceleration : pitchAcceleration;
-        float smoothed = class_3532.method_16439(jerkSmoothing, previousAcceleration, requestedAcceleration);
-        smoothed = class_3532.method_15363(smoothed, -acceleration, acceleration);
+        float smoothed = (float)class_3532.method_16439(jerkSmoothing, previousAcceleration, requestedAcceleration);
+        smoothed = (float)class_3532.method_15363(smoothed, -acceleration, acceleration);
         
         if (yawAxis) yawAcceleration = smoothed;
         else pitchAcceleration = smoothed;
 
         float next = velocity + smoothed;
         float ceiling = maxStep * (1.0F + (float)(seededRandom() - 0.5) * 0.12F);
-        next = class_3532.method_15363(next, -ceiling, ceiling);
+        next = (float)class_3532.method_15363(next, -ceiling, ceiling);
         
         if (error > 0.0F && next > error) next = error;
         else if (error < 0.0F && next < error) next = error;
@@ -367,20 +347,27 @@ public final class NeuroRotation implements AuraRotation {
         double dy = -Math.sin(pitchRad);
         double dz = Math.cos(pitchRad) * Math.cos(yawRad);
         
-        class_243 targetCenter = target.method_73189().method_1031(0, target.method_5982() / 2.0, 0);
-        class_243 toCenter = targetCenter.method_1020(eye);
+        double targetHeight = (double)target.method_5982();
+        class_243 targetCenter = new class_243(target.method_73189().field_1352, target.method_73189().field_1351 + targetHeight / 2.0, target.method_73189().field_1350);
+        double toCenterX = targetCenter.field_1352 - eye.field_1352;
+        double toCenterY = targetCenter.field_1351 - eye.field_1351;
+        double toCenterZ = targetCenter.field_1350 - eye.field_1350;
         
-        double t = toCenter.field_1352 * dx + toCenter.field_1351 * dy + toCenter.field_1350 * dz;
+        double t = toCenterX * dx + toCenterY * dy + toCenterZ * dz;
         if (t < 0 || t > 8.0) return false;
         
-        class_243 closest = eye.method_1031(dx * t, dy * t, dz * t);
-        class_243 diff = closest.method_1020(targetCenter);
+        double closestX = eye.field_1352 + dx * t;
+        double closestY = eye.field_1351 + dy * t;
+        double closestZ = eye.field_1350 + dz * t;
         
-        double distSq = diff.field_1352 * diff.field_1352 + diff.field_1350 * diff.field_1350;
-        double radius = target.method_17681() / 2.0 + 0.15; 
+        double diffX = closestX - targetCenter.field_1352;
+        double diffZ = closestZ - targetCenter.field_1350;
         
-        double vertDist = Math.abs(closest.field_1351 - targetCenter.field_1351);
-        double heightTolerance = target.method_5982() / 2.0 + 0.2;
+        double distSq = diffX * diffX + diffZ * diffZ;
+        double radius = (double)target.method_17681() / 2.0 + 0.15; 
+        
+        double vertDist = Math.abs(closestY - targetCenter.field_1351);
+        double heightTolerance = targetHeight / 2.0 + 0.2;
         
         return distSq < (radius * radius) && vertDist < heightTolerance;
     }
@@ -393,7 +380,7 @@ public final class NeuroRotation implements AuraRotation {
     }
 
     private static float clampPitch(float pitch) {
-        return class_3532.method_15363(pitch, -90.0F, 90.0F);
+        return (float)class_3532.method_15363(pitch, -90.0, 90.0);
     }
 
     @Override
