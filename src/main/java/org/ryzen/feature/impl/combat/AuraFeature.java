@@ -80,8 +80,7 @@ public final class AuraFeature extends Feature implements MinecraftContext {
    private static final String ROTATION_HOLY_WORLD_3 = "HolyWorld 3";
    private static final String ROTATION_SPOOKY_TIME_2 = "SpookyTime 2";
    private static final String ROTATION_NEURO = "Neuro";
-   private static final String ROTATION_BUILDER = "Builder",
-             "RW Neuro";
+   private static final String ROTATION_BUILDER = "Builder";
    private static final String ROTATION_FUNTIME_NEW = "FunTime New";
    private static final String ROTATION_FUNTIME_FOV = "FunTime FOV";
    private static final String ROTATION_LEGIT = "Legit";

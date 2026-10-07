@@ -22,8 +22,6 @@ public class RWNeuroRotation implements AuraRotation {
     @Override
     public void tick(class_746 player, class_1309 target, class_243 targetPos, boolean canAttack) {
         if (target == null || targetPos == null) return;
-        
-        // Use RotationContext to handle the smooth rotation math correctly with eye position
         RotationContext.rotateToPosition(player, targetPos);
     }
 
