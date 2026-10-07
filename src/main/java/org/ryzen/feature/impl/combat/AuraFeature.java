@@ -57,6 +57,7 @@ import org.ryzen.utils.combat.rotations.HolyWorldThreeRotation;
 import org.ryzen.utils.combat.rotations.MatrixVulcanRotation;
 import org.ryzen.utils.combat.rotations.PolarRotation;
 import org.ryzen.utils.combat.rotations.SlothRotation;
+import org.ryzen.utils.combat.rotations.RWNeuroRotation;
 import org.ryzen.utils.combat.rotations.SmoothRotation;
 import org.ryzen.utils.combat.rotations.SolutionRotation;
 import org.ryzen.utils.math.TickSimulator;
@@ -79,7 +80,8 @@ public final class AuraFeature extends Feature implements MinecraftContext {
    private static final String ROTATION_HOLY_WORLD_3 = "HolyWorld 3";
    private static final String ROTATION_SPOOKY_TIME_2 = "SpookyTime 2";
    private static final String ROTATION_NEURO = "Neuro";
-   private static final String ROTATION_BUILDER = "Builder";
+   private static final String ROTATION_BUILDER = "Builder",
+             "RW Neuro";
    private static final String ROTATION_FUNTIME_NEW = "FunTime New";
    private static final String ROTATION_FUNTIME_FOV = "FunTime FOV";
    private static final String ROTATION_LEGIT = "Legit";
@@ -137,7 +139,8 @@ public final class AuraFeature extends Feature implements MinecraftContext {
             "NeuroNotAiTreinig",
             "Sloth",
             "Neuro",
-            "Builder"
+            "Builder",
+             "RW Neuro"
          )
          .chips()
          .renamedFrom("Grim 1", "Grim")
@@ -156,6 +159,7 @@ public final class AuraFeature extends Feature implements MinecraftContext {
    private final AuraRotation spookyTimeTwoRotation = ExpensiveRotation.spookyTime();
    private final AuraRotation neuroRotation = NeuroManager.activeRotation();
    private final AuraRotation builderRotation = new BuilderRotation();
+    private final AuraRotation rwNeuroRotation = new RWNeuroRotation();
    private final AttackTiming timing = new AttackTiming();
    private final AuraAttackController attackController = new AuraAttackController();
    private class_1309 target;
@@ -203,7 +207,8 @@ public final class AuraFeature extends Feature implements MinecraftContext {
             } else {
                boolean attackLikely = !this.targetGraced
                   && AuraRaycast.predictedHitboxDistanceSqr(player, this.target, aimPosition) <= squared(this.attackRangeBlocks(player));
-               this.selectedRotation().tick(player, this.target, aimPoint, attackLikely);
+               this.selectedRotation().setCurrentTarget(this.target);
+                this.selectedRotation().tick(player, this.target, aimPoint, attackLikely);
             }
          }
       }
@@ -511,7 +516,8 @@ public final class AuraFeature extends Feature implements MinecraftContext {
          case "NeuroNotAiTreinig" -> this.neuroNotAiRotation;
          case "SpookyTime 2" -> this.spookyTimeTwoRotation;
          case "Neuro" -> this.neuroRotation;
-         case "Builder" -> this.builderRotation;
+         case "Builder",
+             "RW Neuro" -> this.builderRotation;
          default -> this.matrixVulcanRotation;
       };
    }
@@ -527,6 +533,7 @@ public final class AuraFeature extends Feature implements MinecraftContext {
       this.neuroNotAiRotation.reset();
       this.spookyTimeTwoRotation.reset();
       this.builderRotation.reset();
+      this.rwNeuroRotation.reset();
    }
 
    private double attackRangeBlocks(class_746 player) {

@@ -15,4 +15,7 @@ public interface AuraRotation {
 
    default void reset() {
    }
+
+   default void setCurrentTarget(class_1309 target) {
+   }
 }
