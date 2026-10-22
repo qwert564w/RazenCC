@@ -1,10 +1,10 @@
 plugins {
-    id("fabric-loom") version "1.17.21"
+    id("net.fabricmc.fabric-loom") version "1.19.2"
     id("maven-publish")
 }
 
 group = "org.ryzen"
-version = "1.0.0"
+version = "1.0.0-26.3"
 
 base {
     archivesName.set("ryzen")
@@ -25,20 +25,17 @@ sourceSets {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11")
-    mappings("net.fabricmc:intermediary:1.21.11:v2")
+    minecraft("com.mojang:minecraft:26.3")
+    // 26.1+ is non-obfuscated; official names, no intermediary layer
+    modImplementation("net.fabricmc:fabric-loader:0.20.1")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.164.0+26.3")
 
-    modImplementation("net.fabricmc:fabric-loader:0.19.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.141.6+1.21.11")
-
-    compileOnly("org.projectlombok:lombok:1.18.34")
-    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
 
     include("io.github.llamalad7:mixinextras-fabric:0.5.4")
     modImplementation("io.github.llamalad7:mixinextras-fabric:0.5.4")
 
-    // Для файлов из META-INF/jars используем только modImplementation, без include.
-    // Loom должен сам скопировать их в финальный JAR на основе секции "jars" в fabric.mod.json.
     val nestedJars = fileTree("src/main/java/META-INF/jars") { include("*.jar") }
     modImplementation(nestedJars)
 
@@ -51,7 +48,7 @@ dependencies {
 loom {
     @Suppress("UnstableApiUsage")
     enableModProvidedJavadoc.set(false)
-    
+
     mods {
         create("ryzen") {
             sourceSet(sourceSets.main.get())
@@ -61,7 +58,7 @@ loom {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -71,7 +68,7 @@ tasks.withType<ProcessResources> {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    options.release.set(21)
+    options.release.set(25)
 }
 
 tasks.withType<Jar> {
