@@ -24,31 +24,7 @@ import org.ryzen.event.EventTarget;
 import org.ryzen.event.events.input.KeyboardInputEvent;
 import org.ryzen.event.events.input.MouseInputEvent;
 import org.ryzen.event.events.lifecycle.ShutdownEvent;
-import org.ryzen.feature.impl.combat.AiTrainingFeature;
-import org.ryzen.feature.impl.combat.AimAssistFeature;
-import org.ryzen.feature.impl.combat.AuraFeature;
-import org.ryzen.feature.impl.combat.AutoClickerFeature;
-import org.ryzen.feature.impl.combat.AutoCrystalFeature;
-import org.ryzen.feature.impl.combat.AutoMaceFeature;
-import org.ryzen.feature.impl.combat.AutoMinecartFeature;
-import org.ryzen.feature.impl.combat.AutoSwapFeature;
-import org.ryzen.feature.impl.combat.AutoTotemFeature;
-import org.ryzen.feature.impl.combat.AutoTrapFeature;
-import org.ryzen.feature.impl.combat.BowAimbotFeature;
-import org.ryzen.feature.impl.combat.CombatExtraFeature;
-import org.ryzen.feature.impl.combat.CombatMiscFeature;
-import org.ryzen.feature.impl.combat.CriticalsFeature;
-import org.ryzen.feature.impl.combat.ElytraTargetFeature;
-import org.ryzen.feature.impl.combat.HitBoxesFeature;
-import org.ryzen.feature.impl.combat.KbDisplacementFeature;
-import org.ryzen.feature.impl.combat.NoEntityTraceFeature;
-import org.ryzen.feature.impl.combat.NoFriendDamageFeature;
-import org.ryzen.feature.impl.combat.OffhandGappleFeature;
-import org.ryzen.feature.impl.combat.TargetStrafeFeature;
-import org.ryzen.feature.impl.combat.TriggerBotFeature;
-import org.ryzen.feature.impl.combat.VelocityFeature;
 import org.ryzen.feature.impl.misc.AntiCrashFeature;
-import org.ryzen.feature.impl.misc.AuctionHelperFeature;
 import org.ryzen.feature.impl.misc.AutoDuelFeature;
 import org.ryzen.feature.impl.misc.AutoEnderChestFeature;
 import org.ryzen.feature.impl.misc.AutoExchangeFeature;
@@ -226,29 +202,6 @@ public final class FeatureManager {
                new TimerFeature(),
                new WindHopFeature(),
                new ScaffoldFeature(),
-               new AuraFeature(),
-               new AutoCrystalFeature(),
-               new CriticalsFeature(),
-               new CombatMiscFeature(),
-               new CombatExtraFeature(),
-               new ElytraTargetFeature(),
-               new AiTrainingFeature(),
-               new TriggerBotFeature(),
-               new AimAssistFeature(),
-               new AutoTotemFeature(),
-               new AutoClickerFeature(),
-               new HitBoxesFeature(),
-               new AutoSwapFeature(),
-               new VelocityFeature(),
-               new BowAimbotFeature(),
-               new AutoMaceFeature(),
-               new AutoMinecartFeature(),
-               new AutoTrapFeature(),
-               new KbDisplacementFeature(),
-               new NoEntityTraceFeature(),
-               new NoFriendDamageFeature(),
-               new OffhandGappleFeature(),
-               new TargetStrafeFeature(),
                new HudFeature(),
                new ArrowsFeature(),
                new EntityEspFeature(),
@@ -283,7 +236,6 @@ public final class FeatureManager {
                new NoDelaysFeature(),
                new DeathCoordsFeature(),
                new XCarryFeature(),
-               new AuctionHelperFeature(),
                new AutoBuyFeature(),
                new CollectorFeature(),
                new ServerHelperFeature(),
